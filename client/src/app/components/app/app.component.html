@@ -1,0 +1,96 @@
+<div class="container">
+  <div class="row text-center">
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col">
+          <h2>Medicijnen</h2>
+        </div>
+      </div>
+      <div class="row bg-light border rounded p-1 mb-1" *ngFor="let verpakking of verpakkingen">
+        <div class="col">
+          <span>{{verpakking.medicijn.naam}}</span>
+        </div>
+        <div class="col">
+          <span class="font-weight-bold">{{verpakking.aantal}} </span>
+          <span>{{verpakking.eenheid.toString(10)}}</span>
+        </div>
+        <div class="col">
+          <span class="font-weight-bold" *ngIf="verpakkingIsEenheidStrips(verpakking)">{{verpakking.tablettenPerStrip}}</span>
+          <span class="font-weight-bold" *ngIf="verpakkingIsEenheidFlesjes(verpakking)">{{verpakking.milliliterPerFlesje}}</span>
+          <span class="font-weight-bold" *ngIf="verpakkingIsEenheidOverig(verpakking)">{{verpakking.overig}}</span>
+          <span *ngIf="verpakkingIsEenheidStrips(verpakking)"> tabletten per strip</span>
+          <span *ngIf="verpakkingIsEenheidFlesjes(verpakking)"> milliliter per flesje</span>
+          <span *ngIf="verpakkingIsEenheidOverig(verpakking)"> eenheden</span>
+        </div>
+        <div class="col">
+          <button class="btn btn-primary" (click)="addVerpakking(verpakking)">Toevoegen</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="row">
+        <div class="col">
+          <h2>Recept opstellen</h2>
+        </div>
+      </div>
+      <form [formGroup]="receptForm" (ngSubmit)="onSaveRecept(receptForm.value)" class="border rounded p-1 bg-light">
+        <div class="row mt-1">
+          <div class="col-md-2">
+            <span class="font-weight-bold">BSN:</span>
+          </div>
+          <div class="col-md-10">
+            <input type="text" formControlName="bsn">
+          </div>
+        </div>
+        <div class="row mt-1">
+          <div class="col-md-2">
+            <span class="font-weight-bold">Voorschrijfdatum:</span>
+          </div>
+          <div class="col-md-10">
+            <span>{{getTodayDateString()}}</span>
+          </div>
+        </div>
+        <div class="row mt-1">
+          <div class="col-md-2">
+            <span class="font-weight-bold">Aflevermethode:</span>
+          </div>
+          <div class="col-md-10">
+            <select formControlName="afleverMethode">
+              <option value="0">Afhalen</option>
+              <option value="1">Bezorgen</option>
+            </select>
+          </div>
+        </div>
+        <div class="row mt-1">
+          <div class="col-md-2">
+            <span class="font-weight-bold">Einddatum:</span>
+          </div>
+          <div class="col-md-10">
+            <input type="text" formControlName="eindDatum" placeholder="yyyy-MM-dd">
+          </div>
+        </div>
+        <div class="row mt-1">
+          <div class="col-md-2">
+            <span class="font-weight-bold">Verpakkingen:</span>
+          </div>
+          <div class="col-md-10">
+            <div class="row" *ngFor="let ctrl of getVerpakkingForm().controls; let i = index" [formGroupName]="i">
+              <div class="col">
+                <div class="row">
+                  <div class="col">
+                    <input type="text" formControlName="aantal">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col">
+            <button class="btn btn-success" type="submit">Recept opslaan</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
